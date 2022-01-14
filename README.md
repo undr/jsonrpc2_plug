@@ -1,6 +1,6 @@
 # JSONRPC2Plug
 
-JSONRPC 2 plug
+JSON-RPC 2 plug
 
 ## Installation
 
