@@ -7,7 +7,7 @@ defmodule JSONRPC2Plug do
     do: raise "Plug the JSONRPC2Plug after Plug.Parsers"
 
   def call(%{method: "POST", body_params: body_params} = conn, handler) do
-    resp_body = case handler.handle(body_params, conn) do
+    response = case handler.handle(body_params, conn) do
       []   -> ""
       nil  -> ""
       resp -> Poison.encode!(resp)
@@ -15,7 +15,7 @@ defmodule JSONRPC2Plug do
 
     conn
     |> Plug.Conn.put_resp_header("content-type", "application/json")
-    |> Plug.Conn.resp(200, resp_body)
+    |> Plug.Conn.resp(200, response)
   end
 
   def call(conn, _),
