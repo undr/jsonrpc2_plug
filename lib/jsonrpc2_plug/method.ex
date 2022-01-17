@@ -2,7 +2,6 @@ defmodule JSONRPC2Plug.Method do
   @callback handle_call(map() | list(), Plug.Conn.t()) :: {:ok, any()} | {:error, any()} | {:jsonrpc2_error, any()}
   @callback handle_cast(map() | list(), Plug.Conn.t()) :: {:ok, any()} | {:error, any()} | {:jsonrpc2_error, any()}
   @callback validate(map() | list()) :: {:ok, map() | list()} | {:invalid, keyword() | map()}
-  @callback validate(map() | list()) :: {:ok, map() | list()} | {:invalid, keyword() | map()}
   @callback handle_exception(map(), Exception.t(), list()) :: {:jsonrpc2_error, any()}
   @callback handle_error(map(), {Exception.kind(), any()}, list()) :: {:jsonrpc2_error, any()}
 
