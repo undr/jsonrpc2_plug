@@ -71,8 +71,8 @@ defmodule JSONRPC2Plug.Method do
          {:ok, result} <- apply(module, func, [params, conn]) do
       {:ok, result}
     else
-      {:invalid, details} ->
-        {:jsonrpc2_error, {:invalid_params, Enum.into(details, %{})}}
+      {:invalid, errors} ->
+        {:jsonrpc2_error, {:invalid_params, Enum.into(errors, %{})}}
 
       error ->
         error

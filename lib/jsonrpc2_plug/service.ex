@@ -15,7 +15,7 @@ defmodule JSONRPC2Plug.Service do
 
       @before_compile unquote(__MODULE__)
 
-      def handle(body_params, conn) when is_list(body_params),
+      def handle(%{"_json" => body_params}, conn) when is_list(body_params),
         do: Enum.map(body_params, fn(one) -> handle_one(one, conn) end) |> drop_nils()
       def handle(body_params, conn) when is_map(body_params),
         do: handle_one(body_params, conn)

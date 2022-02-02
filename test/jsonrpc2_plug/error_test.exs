@@ -9,6 +9,7 @@ defmodule JSONRPC2Plug.ErrorTest do
     assert {-32601, "Method not found"} = Error.code2error(:method_not_found)
     assert {-32602, "Invalid params"} = Error.code2error(:invalid_params)
     assert {-32603, "Internal error"} = Error.code2error(:internal_error)
+    assert {-32000, "Server error"} = Error.code2error(:server_error)
     assert {-32603, "Internal error"} = Error.code2error(:unknown_error)
   end
 end

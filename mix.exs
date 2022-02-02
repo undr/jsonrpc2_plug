@@ -21,8 +21,9 @@ defmodule Jsonrpc2Plug.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:poison, "~> 4.0"},
       {:plug, "~> 1.12"},
+      {:poison, "~> 4.0"},
+      {:gettext, "~> 0.19.0"},
       {:dialyxir, "~> 0.3", only: :dev}
     ]
   end
