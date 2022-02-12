@@ -1,4 +1,4 @@
-defmodule JSONRPC2Plug.Validator.Input do
+defmodule JSONRPC2Plug.Validator.Dataset do
   defstruct [:data, errors: []]
 
   def wrap(%__MODULE__{} = result),

@@ -4,7 +4,7 @@ defmodule JSONRPC2Plug.Validator do
   alias JSONRPC2Plug.Validator.Length
   alias JSONRPC2Plug.Validator.Inclusion
   alias JSONRPC2Plug.Validator.Exclusion
-  alias JSONRPC2Plug.Validator.Input
+  alias JSONRPC2Plug.Validator.Dataset
 
   def required do
     fn(value) ->
@@ -52,23 +52,23 @@ defmodule JSONRPC2Plug.Validator do
     do: Type.rule(type: typename)
 
   def validate(data, key, validators) do
-    input = Input.wrap(data)
-    value = Input.get_value(input, key)
-    validate_key_value(key, value, validators, input)
+    dataset = Dataset.wrap(data)
+    value = Dataset.get_value(dataset, key)
+    validate_key_value(key, value, validators, dataset)
   end
 
-  def unwrap(input),
-    do: Input.unwrap(input)
+  def unwrap(dataset),
+    do: Dataset.unwrap(dataset)
 
-  defp validate_key_value(_key, _value, [], input),
-    do: input
-  defp validate_key_value(key, value, [validator | validators], input) do
+  defp validate_key_value(_key, _value, [], dataset),
+    do: dataset
+  defp validate_key_value(key, value, [validator | validators], dataset) do
     case validator.(value) do
       :ok ->
-        validate_key_value(key, value, validators, input)
+        validate_key_value(key, value, validators, dataset)
 
       {:error, reason, opts} ->
-        Input.add_error(input, key, {reason, opts})
+        Dataset.add_error(dataset, key, {reason, opts})
     end
   end
 end

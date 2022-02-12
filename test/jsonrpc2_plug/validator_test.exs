@@ -2,7 +2,7 @@ defmodule JSONRPC2Plug.ValidatorTest do
   use ExUnit.Case
 
   alias JSONRPC2Plug.Validator
-  alias JSONRPC2Plug.Validator.Input
+  alias JSONRPC2Plug.Validator.Dataset
 
   setup(_) do
     {:ok, validators: [Validator.required(), Validator.len(min: 5)]}
@@ -154,36 +154,36 @@ defmodule JSONRPC2Plug.ValidatorTest do
 
   describe ".validate" do
     test "with data", %{validators: validators} do
-      assert %Input{errors: []} = Validator.validate(%{"some" => "value"}, "some", validators)
-      assert %Input{
+      assert %Dataset{errors: []} = Validator.validate(%{"some" => "value"}, "some", validators)
+      assert %Dataset{
         errors: [some: [{"length must be greater than or equal to %{value}", [value: 5]}]]
       } = Validator.validate(%{"some" => "data"}, "some", validators)
     end
 
-    test "with input", %{validators: validators} do
-      assert %Input{
+    test "with dataset", %{validators: validators} do
+      assert %Dataset{
         errors: []
-      } = Validator.validate(Input.wrap(%{"some" => "value"}), "some", validators)
+      } = Validator.validate(Dataset.wrap(%{"some" => "value"}), "some", validators)
 
-      assert %Input{
+      assert %Dataset{
         errors: [some: [{"length must be greater than or equal to %{value}", [value: 5]}]]
-      } = Validator.validate(Input.wrap(%{"some" => "data"}), "some", validators)
+      } = Validator.validate(Dataset.wrap(%{"some" => "data"}), "some", validators)
     end
   end
 
   describe ".unwrap" do
-    test "with valid input" do
-      input = %Input{data: %{"some" => "value"}}
-      assert {:ok, %{"some" => "value"}} = Validator.unwrap(input)
+    test "with valid dataset" do
+      dataset = %Dataset{data: %{"some" => "value"}}
+      assert {:ok, %{"some" => "value"}} = Validator.unwrap(dataset)
     end
 
-    test "with invalid input" do
-      input = %Input{
+    test "with invalid dataset" do
+      dataset = %Dataset{
         data: %{"some" => "value"},
         errors: [some: [{"is not a %{type}", [type: :integer]}, {"is required", []}]]
       }
 
-      assert {:invalid, [some: ["is not a integer", "is required"]]} = Validator.unwrap(input)
+      assert {:invalid, [some: ["is not a integer", "is required"]]} = Validator.unwrap(dataset)
     end
   end
 end
