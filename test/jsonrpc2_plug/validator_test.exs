@@ -183,7 +183,7 @@ defmodule JSONRPC2Plug.ValidatorTest do
         errors: [some: [{"is not a %{type}", [type: :integer]}, {"is required", []}]]
       }
 
-      assert {:invalid, [some: ["is not a integer", "is required"]]} = Validator.unwrap(dataset)
+      assert {:invalid, %{some: ["is not a integer", "is required"]}} = Validator.unwrap(dataset)
     end
   end
 end

@@ -1,8 +1,10 @@
 defmodule JSONRPC2Plug.Validator.Length do
+  alias JSONRPC2Plug.Validator.Rule
   alias JSONRPC2Plug.Validator.Number
 
   use JSONRPC2Plug.Validator.Rule
 
+  @spec check(Rule.value(), Rule.opts()) :: Rule.result()
   def check(value, opts) do
     with {:ok, length} <- get_length(value),
          :ok <- Number.check(length, opts) do
