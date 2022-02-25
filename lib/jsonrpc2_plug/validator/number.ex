@@ -1,6 +1,9 @@
 defmodule JSONRPC2Plug.Validator.Number do
+  alias JSONRPC2Plug.Validator.Rule
+
   use JSONRPC2Plug.Validator.Rule
 
+  @spec check(Rule.value(), Rule.opts()) :: Rule.result()
   def check(nil, _opts),
     do: :ok
   def check(value, opts)  do

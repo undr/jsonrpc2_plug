@@ -100,8 +100,11 @@ defmodule JSONRPC2Plug.Service do
     end
   end
 
+  @spec method(Request.method(), module()) :: term()
   defmacro method(name, handler) when is_binary(name),
     do: build_method(String.to_atom(name), handler)
+
+  @spec method(atom(), module()) :: term()
   defmacro method(name, handler) when is_atom(name),
     do: build_method(name, handler)
 

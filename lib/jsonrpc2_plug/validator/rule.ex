@@ -2,6 +2,9 @@ defmodule JSONRPC2Plug.Validator.Rule do
   @type ok :: :ok
   @type error :: {:error, String.t(), keyword()}
   @type rule :: (term() -> ok() | error())
+  @type result :: :ok | error()
+  @type value :: nil | term()
+  @type opts :: keyword()
 
   @callback rule(keyword()) :: rule()
   @callback check(term(), keyword()) :: ok() | error()

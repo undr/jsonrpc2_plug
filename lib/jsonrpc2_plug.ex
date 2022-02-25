@@ -3,13 +3,14 @@ defmodule JSONRPC2Plug do
   require Logger
 
   @impl true
+  @spec init(module()) :: module()
   def init(handler),
     do: handler
 
   @impl true
+  @spec call(Plug.Conn.t(), Plug.opts()) :: Plug.Conn.t()
   def call(%{method: "POST", body_params: %Plug.Conn.Unfetched{}}, _handler),
     do: raise "Plug the JSONRPC2Plug after Plug.Parsers"
-
   @impl true
   def call(%{method: "POST", body_params: body_params} = conn, handler) do
     Logger.debug("JSONRPC2 Request: #{inspect(body_params)}")
@@ -22,11 +23,11 @@ defmodule JSONRPC2Plug do
     |> Plug.Conn.put_resp_header("content-type", "application/json")
     |> Plug.Conn.resp(200, response)
   end
-
   @impl true
   def call(conn, _),
     do: Plug.Conn.resp(conn, 404, "")
 
+  @spec send_error(Plug.Conn.t(), atom(), struct()) :: Plug.Conn.t()
   def send_error(conn, :error, %Plug.Parsers.ParseError{} = ex),
     do: send_error_response(conn, :parse_error, Exception.message(ex))
   def send_error(conn, kind, reason) do

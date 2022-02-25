@@ -1,6 +1,10 @@
 defmodule JSONRPC2Plug.Method do
-  @callback handle_call(map() | list(), Plug.Conn.t()) :: {:ok, any()} | {:error, any()} | {:jsonrpc2_error, any()}
-  @callback handle_cast(map() | list(), Plug.Conn.t()) :: {:ok, any()} | {:error, any()} | {:jsonrpc2_error, any()}
+  alias JSONRPC2Plug.Request
+
+  @type result :: {:ok, any()} | {:error, any()} | {:jsonrpc2_error, any()}
+
+  @callback handle_call(map() | list(), Plug.Conn.t()) :: result()
+  @callback handle_cast(map() | list(), Plug.Conn.t()) :: result()
   @callback validate(map() | list()) :: {:ok, map() | list()} | {:invalid, keyword() | map()}
   @callback handle_exception(map(), Exception.t(), list()) :: {:jsonrpc2_error, any()}
   @callback handle_error(map(), {Exception.kind(), any()}, list()) :: {:jsonrpc2_error, any()}
@@ -10,13 +14,17 @@ defmodule JSONRPC2Plug.Method do
       @behaviour unquote(__MODULE__)
       @before_compile unquote(__MODULE__)
 
+      @type result :: unquote(__MODULE__).result()
+
       require Logger
 
       alias JSONRPC2Plug.Request
 
+      @spec call(Request.params(), Plug.Conn.t()) :: result()
       def call(params, conn),
         do: unquote(__MODULE__).handle({__MODULE__, :handle_call}, params, conn)
 
+      @spec cast(Request.params(), Plug.Conn.t()) :: result()
       def cast(params, conn),
         do: unquote(__MODULE__).handle({__MODULE__, :handle_cast}, params, conn)
 
@@ -66,6 +74,7 @@ defmodule JSONRPC2Plug.Method do
     end
   end
 
+  @spec handle({module(), fun()}, Request.params(), Plug.Conn.t()) :: result()
   def handle({module, func}, params, conn) do
     with {:ok, params} <- module.validate(params),
          {:ok, result} <- apply(module, func, [params, conn]) do

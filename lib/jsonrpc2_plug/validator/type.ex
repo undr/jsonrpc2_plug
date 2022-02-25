@@ -1,6 +1,9 @@
 defmodule JSONRPC2Plug.Validator.Type do
+  alias JSONRPC2Plug.Validator.Rule
+
   use JSONRPC2Plug.Validator.Rule
 
+  @spec check(Rule.value(), Rule.opts()) :: Rule.result()
   def check(value, opts \\ []) do
     {:ok, type} = Keyword.fetch(opts, :type)
     check_type(type, value)

@@ -36,7 +36,7 @@ defmodule JSONRPC2Plug.Validator.DatasetTest do
     end
 
     test "with invalid dataset", %{invalid_dataset: dataset} do
-      assert {:invalid, [some: ["is required", "is not a integer"]]} = Dataset.unwrap(dataset)
+      assert {:invalid, %{some: ["is required", "is not a integer"]}} = Dataset.unwrap(dataset)
     end
   end
 end
