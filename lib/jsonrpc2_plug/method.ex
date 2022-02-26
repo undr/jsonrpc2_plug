@@ -20,12 +20,40 @@ defmodule JSONRPC2Plug.Method do
 
       alias JSONRPC2Plug.Request
 
+      @doc """
+      Call service method.
+
+      Example:
+
+          iex> DivideMethod.call(%{"x" => 13, "y" => 5})
+          {:ok, 3}
+
+          iex> DivideMethod.call(%{"x" => 13, "y" => "5"})
+          {:jsonrpc2_error, {:invalid_params, %{"y" => ["is not a integer"]}}}
+
+          iex> DivideMethod.call(%{"x" => 13, "y" => 0})
+          {:jsonrpc2_error, {12345, "bad argument in arithmetic expression"}}
+      """
       @spec call(Request.params(), Plug.Conn.t()) :: result()
-      def call(params, conn),
+      def call(params, conn \\ %Plug.Conn{}),
         do: unquote(__MODULE__).handle({__MODULE__, :handle_call}, params, conn)
 
+      @doc """
+      Cast service method.
+
+      Example:
+
+          iex> DivideMethod.call(%{"x" => 13, "y" => 5})
+          {:ok, 3}
+
+          iex> DivideMethod.call(%{"x" => 13, "y" => "5"})
+          {:jsonrpc2_error, {:invalid_params, %{"y" => ["is not a integer"]}}}
+
+          iex> DivideMethod.call(%{"x" => 13, "y" => 0})
+          {:jsonrpc2_error, {12345, "bad argument in arithmetic expression"}}
+      """
       @spec cast(Request.params(), Plug.Conn.t()) :: result()
-      def cast(params, conn),
+      def cast(params, conn \\ %Plug.Conn{}),
         do: unquote(__MODULE__).handle({__MODULE__, :handle_cast}, params, conn)
 
       defp error!(code),
@@ -81,7 +109,7 @@ defmodule JSONRPC2Plug.Method do
       {:ok, result}
     else
       {:invalid, errors} ->
-        {:jsonrpc2_error, {:invalid_params, Enum.into(errors, %{})}}
+        {:jsonrpc2_error, {:invalid_params, errors}}
 
       error ->
         error

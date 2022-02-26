@@ -15,6 +15,9 @@ defmodule JSONRPC2Plug.Service do
 
       @before_compile unquote(__MODULE__)
 
+      @doc """
+      Handle service requests.
+      """
       def handle(%{"_json" => body_params}, conn) when is_list(body_params),
         do: Enum.map(body_params, fn(one) -> handle_one(one, conn) end) |> drop_nils()
       def handle(body_params, conn) when is_map(body_params),
@@ -100,6 +103,13 @@ defmodule JSONRPC2Plug.Service do
     end
   end
 
+  @doc """
+  Define method and handler.
+
+  Example:
+      method "add", AddMethod
+      method :subtract, SubtractMethod
+  """
   @spec method(Request.method(), module()) :: term()
   defmacro method(name, handler) when is_binary(name),
     do: build_method(String.to_atom(name), handler)

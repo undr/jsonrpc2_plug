@@ -10,6 +10,23 @@ defmodule JSONRPC2Plug.Request do
 
   defstruct [:id, :method, :params]
 
+  @doc """
+  Build request struct from input data
+
+  Example:
+
+      iex> Request.parse(%{"id" => 123, "method" => "add", "params" => %{"x" => 15, "y" => 51}, "jsonrpc" => "2.0"})
+      {:ok, %Request{id: 123, method: "add", params: %{"x" => 15, "y" => 51}, "jsonrpc" => "2.0"}}
+
+      iex> Request.parse(%{"id" => nil, "method" => "add", "params" => %{"x" => 15, "y" => 51}, "jsonrpc" => "2.0"})
+      {:ok, %Request{id: nil, method: "add", params: %{"x" => 15, "y" => 51}, "jsonrpc" => "2.0"}}
+
+      iex> Request.parse(%{"id" => 123, "method" => "add", "params" => %{"x" => 15, "y" => 51}})
+      {:invalid, 123}
+
+      iex> Request.parse(%{"method" => "add", "params" => %{"x" => 15, "y" => 51}, "jsonrpc" => "2.0"})
+      {:invalid, nil}
+  """
   @spec parse(map()) :: {:ok, t()} | {:invalid, id()}
   def parse(%{"id" => id, "method" => method, "params" => params, "jsonrpc" => "2.0"}),
     do: {:ok, %__MODULE__{id: id, method: method, params: params}}

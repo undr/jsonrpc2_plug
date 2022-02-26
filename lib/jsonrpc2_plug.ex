@@ -1,4 +1,6 @@
 defmodule JSONRPC2Plug do
+  @moduledoc "README.md" |> File.read!()
+
   @behaviour Plug
   require Logger
 
@@ -7,6 +9,14 @@ defmodule JSONRPC2Plug do
   def init(handler),
     do: handler
 
+  @doc """
+  HTTP entry point to JSONRPC 2.0 services. It's usual plug and accepts service handler module as a param.
+
+  Example:
+      use Plug.Router
+      
+      forward "/jsonrpc", to: JSONRPC2Plug, init_opts: CalculatorService
+  """
   @impl true
   @spec call(Plug.Conn.t(), Plug.opts()) :: Plug.Conn.t()
   def call(%{method: "POST", body_params: %Plug.Conn.Unfetched{}}, _handler),
@@ -27,6 +37,25 @@ defmodule JSONRPC2Plug do
   def call(conn, _),
     do: Plug.Conn.resp(conn, 404, "")
 
+  @doc """
+  Send an error encoded according to JSONRPC 2.0 spec. It can be useful for global error handler in the router.
+
+  Example:
+      forward "/jsonrpc", to: JSONRPC2Plug, init_opts: CalculatorService
+
+      @impl Plug.ErrorHandler
+      def handle_errors(conn, %{kind: kind, reason: reason, stack: stacktrace}) do
+        Logger.error(Exception.format(kind, reason, stacktrace))
+
+        case conn do
+          %{request_path: "/jsonrpc"} ->
+            JSONRPC2Plug.send_error(conn, kind, reason)
+
+          _ ->
+            send_resp(conn, 500, "Someting went wrong")
+        end
+      end
+  """
   @spec send_error(Plug.Conn.t(), atom(), struct()) :: Plug.Conn.t()
   def send_error(conn, :error, %Plug.Parsers.ParseError{} = ex),
     do: send_error_response(conn, :parse_error, Exception.message(ex))
