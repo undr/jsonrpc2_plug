@@ -7,8 +7,23 @@ defmodule Jsonrpc2Plug.MixProject do
       version: "0.1.0",
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
+      description: description(),
+      package: package(),
       deps: deps()
     ]
+  end
+
+  def package do
+    [
+      maintainers: ["Andrei Lepeshkin"],
+      licenses: ["MIT"],
+      links: %{"GitHub" => "https://github.com/undr/jsonrpc2_plug"}
+    ]
+  end
+
+  def description do
+    "JSONRPC2Plug is an Elixir library for a JSON-RPC 2.0 server. " <>
+    "Can be used as the plug middleware or as a standalone transport-agnostic server handler."
   end
 
   # Run "mix help compile.app" to learn about applications.
