@@ -46,7 +46,7 @@ defmodule JSONRPC2Plug.ServiceTest do
       do: {:ok, "result"}
 
     def validate(%{"invalid" => true}),
-      do: {:invalid, [key: ["error 1", "error 2"]]}
+      do: {:invalid, %{key: ["error 1", "error 2"]}}
     def validate(params),
       do: {:ok, params}
   end

@@ -31,14 +31,39 @@ defmodule JSONRPC2Plug.Error do
   def code2error(code),
     do: Keyword.get(@errors, code, {-32603, "Internal error"})
 
+  @doc """
+  Create error struct with predefined errors.
+
+  Example:
+      iex> Error.new("123", :invalid_request)
+      %Error{id: "123", error: %{code: -32600, message: "Invalid request"}, jsonrpc: "2.0"}
+  """
   @spec new(id(), atom()) :: t()
   def new(id, code),
     do: %__MODULE__{id: id, error: error(code)}
 
+  @doc """
+  Create error struct.
+
+  Example:
+      iex> Error.new("123", :invalid_params, %{"x" => ["is not a integer"]})
+      %Error{id: "123", error: %{code: -32602, message: "Invalid params", data: %{"x" => ["is not a integer"]}}, jsonrpc: "2.0"}
+
+      iex> Error.new("123", 500, "Some valuable error")
+      %Error{id: "123", error: %{code: 500, message: "Some valuable error"}, jsonrpc: "2.0"}
+  """
   @spec new(id(), raw_code(), message() | data()) :: t()
   def new(id, code, message_or_data),
     do: %__MODULE__{id: id, error: error(code, message_or_data)}
 
+  @doc """
+  Create error struct with custom errors.
+
+  Example:
+
+      iex> Error.new("123", 500, "Some valuable error", "details")
+      %Error{id: "123", error: %{code: 500, message: "Some valuable error", data: "details"}, jsonrpc: "2.0"}
+  """
   @spec new(id(), raw_code(), message(), data()) :: t()
   def new(id, code, message, data),
     do: %__MODULE__{id: id, error: error(code, message, data)}
