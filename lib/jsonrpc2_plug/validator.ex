@@ -9,6 +9,23 @@ defmodule JSONRPC2Plug.Validator do
 
   @type validator :: (Rule.value() -> Rule.result())
 
+  defmacro __using__(_) do
+    :functions
+    |> __MODULE__.__info__()
+    |> Enum.map(fn({func, arity}) ->
+      arguments = 0..10
+      |> Enum.take(arity)
+      |> Enum.map(&(:"arg#{&1}"))
+      |> Enum.map(&Macro.var(&1, nil))
+
+      quote location: :keep do
+        def unquote(func)(unquote_splicing(arguments)) do
+          unquote(__MODULE__).unquote(func)(unquote_splicing(arguments))
+        end
+      end
+    end)
+  end
+
   @spec required() :: validator()
   def required do
     fn(value) ->
