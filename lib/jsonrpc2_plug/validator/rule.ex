@@ -11,8 +11,12 @@ defmodule JSONRPC2Plug.Validator.Rule do
 
   defmacro __using__(_) do
     quote location: :keep do
-      def rule(opts \\ []),
-        do: fn(value) -> check(value, opts) end
+      def rule(opts \\ []) do
+        fn
+          (nil)   -> :ok
+          (value) -> check(value, opts)
+        end
+      end
 
       defoverridable [rule: 1]
 
