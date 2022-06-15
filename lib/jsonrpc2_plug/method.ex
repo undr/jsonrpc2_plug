@@ -105,7 +105,7 @@ defmodule JSONRPC2Plug.Method do
   @spec handle({module(), fun()}, Request.params(), Plug.Conn.t()) :: result()
   def handle({module, func}, params, conn) do
     with {:ok, params} <- module.validate(params),
-         {:ok, result} <- apply(module, func, [params, conn]) do
+         {:ok, result} <- apply(module, func, [atomize_keys(params), conn]) do
       {:ok, result}
     else
       {:invalid, errors} ->
@@ -115,4 +115,14 @@ defmodule JSONRPC2Plug.Method do
         error
     end
   end
+
+  defp atomize_keys(params) when is_map(params) do
+    params
+    |> Enum.map(fn {k, v} -> {String.to_atom(k), atomize_keys(v)} end)
+    |> Enum.into(%{})
+  end
+  defp atomize_keys([head | rest]),
+    do: [atomize_keys(head) | atomize_keys(rest)]
+  defp atomize_keys(value),
+    do: value
 end
