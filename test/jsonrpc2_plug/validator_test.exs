@@ -25,8 +25,8 @@ defmodule JSONRPC2Plug.ValidatorTest do
   end
 
   test ".format" do
-    assert {:error, "does not match format %{format}", [format: ~r/some/]} = Validator.format(~r/some/).("xxx")
-    assert {:error, "does not match format %{format}", [format: ~r/some/]} = Validator.format(~r/some/).(123)
+    assert {:error, "does not match format %{format}", [format: "some"]} = Validator.format(~r/some/).("xxx")
+    assert {:error, "does not match format %{format}", [format: "some"]} = Validator.format(~r/some/).(123)
     assert :ok = Validator.format(~r/some/).(nil)
     assert :ok = Validator.format(~r/some/).("something")
   end
