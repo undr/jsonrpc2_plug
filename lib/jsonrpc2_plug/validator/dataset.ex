@@ -46,6 +46,11 @@ defmodule JSONRPC2Plug.Validator.Dataset do
     error_messages(errors, [{key, key_messages} | messages])
   end
 
-  defp gettext(msg, opts),
-    do: Gettext.dgettext(JSONRPC2Plug.Gettext, "errors", msg, opts)
+  defp gettext(msg, opts) do
+    backend = Application.get_env(
+      :jsonrpc2_plug, JSONRPC2Plug.Gettext.Backend, JSONRPC2Plug.Gettext
+    )
+
+    Gettext.dgettext(backend, "errors", msg, opts)
+  end
 end
