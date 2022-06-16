@@ -32,7 +32,7 @@ defmodule JSONRPC2Plug.ValidatorTest do
   end
 
   test ".exclude" do
-    assert {:error, "is in the black list: %{list}", [list: [1, 2, 3]]} = Validator.exclude([1, 2, 3]).(2)
+    assert {:error, "is in the black list: %{list}", [list: "1, 2, 3"]} = Validator.exclude([1, 2, 3]).(2)
     assert {:error, "is in the black list: %{list}", [list: "123"]} = Validator.exclude("123").("4")
     assert {:error, "is in the black list: %{list}", [list: 12345]} = Validator.exclude(12345).(2)
     assert :ok = Validator.exclude([1, 2, 3]).(4)
@@ -40,7 +40,7 @@ defmodule JSONRPC2Plug.ValidatorTest do
   end
 
   test ".include" do
-    assert {:error, "is not in the inclusion list: %{list}", [list: [1, 2, 3]]} = Validator.include([1, 2, 3]).(4)
+    assert {:error, "is not in the inclusion list: %{list}", [list: "1, 2, 3"]} = Validator.include([1, 2, 3]).(4)
     assert {:error, "is not in the inclusion list: %{list}", [list: "123"]} = Validator.include("123").("3")
     assert {:error, "is not in the inclusion list: %{list}", [list: 12345]} = Validator.include(12345).(2)
     assert :ok = Validator.include([1, 2, 3]).(3)
