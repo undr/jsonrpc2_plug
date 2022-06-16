@@ -54,7 +54,7 @@ defmodule JSONRPC2Plug.Validator do
       if is_nil(value) || (is_binary(value) && Regex.match?(regex, value)) do
         :ok
       else
-        {:error, "does not match format %{format}", [format: regex]}
+        {:error, "does not match format %{format}", [format: Regex.source(regex)]}
       end
     end
   end
