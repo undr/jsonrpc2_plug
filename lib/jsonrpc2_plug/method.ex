@@ -10,7 +10,7 @@ defmodule JSONRPC2Plug.Method do
   @callback handle_error(map(), {Exception.kind(), any()}, list()) :: {:jsonrpc2_error, any()}
 
   defmacro __using__(_) do
-    quote location: :keep do
+    quote location: :keep, generated: true do
       @behaviour unquote(__MODULE__)
       @before_compile unquote(__MODULE__)
 
@@ -102,7 +102,7 @@ defmodule JSONRPC2Plug.Method do
     end
   end
 
-  @spec handle({module(), fun()}, Request.params(), Plug.Conn.t()) :: result()
+  @spec handle({module(), atom()}, Request.params(), Plug.Conn.t()) :: result()
   def handle({module, func}, params, conn) do
     with {:ok, params} <- module.validate(params),
          {:ok, result} <- apply(module, func, [atomize_keys(params), conn]) do
