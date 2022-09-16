@@ -75,7 +75,7 @@ defmodule JSONRPC2Plug.Validator do
   def number(opts),
     do: Number.rule(opts)
 
-  @spec type(atom()) :: validator()
+  @spec type(atom() | {:array, atom()}) :: validator()
   def type(typename),
     do: Type.rule(type: typename)
 
