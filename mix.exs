@@ -38,7 +38,7 @@ defmodule Jsonrpc2Plug.MixProject do
     [
       {:plug, "~> 1.12"},
       {:poison, "~> 4.0"},
-      {:gettext, "~> 0.19.0"},
+      {:gettext, ">= 0.19.0"},
       {:dialyxir, "~> 1.2.0", only: [:dev, :test], runtime: false},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
     ]
