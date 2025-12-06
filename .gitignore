@@ -26,3 +26,4 @@ jsonrpc2_plug-*.tar
 # Temporary files for e.g. tests
 /tmp
 mix.lock
+/.elixir_ls/

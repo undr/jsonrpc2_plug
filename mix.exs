@@ -1,11 +1,11 @@
-defmodule Jsonrpc2Plug.MixProject do
+defmodule Jsonrpc2.Plug.MixProject do
   use Mix.Project
 
   def project do
     [
       app: :jsonrpc2_plug,
-      version: "0.1.0",
-      elixir: "~> 1.11",
+      version: "2.0.0",
+      elixir: "~> 1.18",
       start_permanent: Mix.env() == :prod,
       description: description(),
       package: package(),
@@ -22,8 +22,8 @@ defmodule Jsonrpc2Plug.MixProject do
   end
 
   def description do
-    "JSONRPC2Plug is an Elixir library for a JSON-RPC 2.0 server. " <>
-    "Can be used as the plug middleware or as a standalone transport-agnostic server handler."
+    "An Elixir `plug` library for extending an HTTP server with JSONRPC 2.0 protocol services. " <>
+      "It's HTTP transport level. For use both in the Phoenix application and pure `plug`-compatable server."
   end
 
   # Run "mix help compile.app" to learn about applications.
@@ -36,10 +36,8 @@ defmodule Jsonrpc2Plug.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:plug, "~> 1.12"},
-      {:poison, "~> 4.0"},
-      {:gettext, ">= 0.19.0"},
-      {:dialyxir, "~> 1.2.0", only: [:dev, :test], runtime: false},
+      {:plug, "~> 1.0"},
+      {:jsonrpc2_service, "~> 0.1.0"},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
     ]
   end
