@@ -40,7 +40,7 @@ You can handle errors outside of `plug`. Add `Plug.ErrorHandler` into a router a
     kind |> Exception.format(reason, stacktrace) |> Logger.error()
 
     case conn do
-      %{request_path: "/jsonrpc/games"} ->
+      %{request_path: "/jsonrpc"} ->
         JSONRPC2.Plug.send_error(conn, kind, reason)
 
       _ ->
