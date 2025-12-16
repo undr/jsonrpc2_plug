@@ -2,7 +2,6 @@ defmodule JSONRPC2.Plug do
   @moduledoc "README.md" |> File.read!()
 
   @behaviour Plug
-  require Logger
 
   @impl true
   @spec init(module()) :: module()
@@ -26,12 +25,7 @@ defmodule JSONRPC2.Plug do
 
   @impl true
   def call(%{method: "POST", body_params: body_params} = conn, handler) do
-    Logger.debug("JSONRPC2 Request: #{inspect(body_params)}")
-
     response = execute_request(handler, body_params, conn)
-
-    Logger.debug("JSONRPC2 Response: #{response}")
-
     conn
     |> Plug.Conn.put_resp_header("content-type", "application/json")
     |> Plug.Conn.resp(200, response)
